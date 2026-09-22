@@ -1,534 +1,109 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flores Amarillas para Ti</title>
-  <link rel="stylesheet" href="./style.css">
-  <style>
-    /* Estilo del contenedor de Login / Bienvenida */
-    .login-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background-color: #0f1423;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 99999;
-      transition: opacity 1s ease, visibility 1s ease;
-    }
+<!-- Pantalla de Entrada Interactiva -->
+<div class="login-overlay" id="loginOverlay">
+  <div class="login-card">
+    <img src="URL_DE_TU_IMAGEN_AQUI" alt="Foto especial">
+    <h2>Mensaje Secreto 💌</h2>
+    <p>Escribe el código para abrir mi corazón</p>
+    <input type="password" id="codeInput" placeholder="Código secreto">
+    <span class="error-msg" id="errorMsg">Código incorrecto. Inténtalo de nuevo.</span>
+    <button onclick="verificarCodigo()">Abrir regalo</button>
+  </div>
+</div>
 
-    .login-card {
-      background: #1b2033;
-      padding: 30px 25px;
-      border-radius: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-      text-align: center;
-      max-width: 360px;
-      width: 90%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 15px;
-    }
+<!-- Contenido de la Carta / Flores -->
+<div class="mensaje-romantico">
+  <h1>¡Feliz día de las Flores Amarillas! 💛</h1>
+  <p>Para la persona más especial del mundo.</p>
+</div>
 
-    .login-card img {
-      width: 100%;
-      max-height: 200px;
-      object-fit: cover;
-      border-radius: 12px;
-    }
+<div class="mensaje-postdata">
+  Pd: Esto se suponia seria para este mesario que te olvidaste jsjs, o nos olvidamos en si, feliz mesario atrasado too :(
+</div>
 
-    .login-card h2 {
-      color: #ffffff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 1.5rem;
-      margin: 5px 0 0 0;
-    }
+<div class="stars-background"></div>
 
-    .login-card p {
-      color: #a0a5b5;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 0.95rem;
-      margin: 0;
-    }
+<div class="hearts-container">
+  <div class="heart">♥</div>
+  <div class="heart">♥</div>
+  <div class="heart">♥</div>
+  <div class="heart">♥</div>
+  <div class="heart">♥</div>
+  <div class="heart">♥</div>
+</div>
 
-    .login-card input {
-      width: 100%;
-      padding: 12px 15px;
-      border-radius: 10px;
-      border: 1px solid #333a52;
-      background-color: #2a3045;
-      color: #ffffff;
-      font-size: 1rem;
-      text-align: center;
-      outline: none;
-      box-sizing: border-box;
-    }
-
-    .login-card input::placeholder {
-      color: #6c738a;
-    }
-
-    .login-card button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: none;
-      background-color: #ff4081;
-      color: #ffffff;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease, transform 0.1s ease;
-    }
-
-    .login-card button:hover {
-      background-color: #e03570;
-    }
-
-    .login-card button:active {
-      transform: scale(0.98);
-    }
-
-    .error-msg {
-      color: #ff5252;
-      font-size: 0.85rem;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: none;
-      margin-top: -5px;
-    }
-
-    /* Ocultar pantalla de acceso cuando el código es correcto */
-    .login-overlay.hidden {
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-    }
-
-    /* Estilos para el mensaje romántico */
-    .mensaje-romantico {
-      position: absolute;
-      top: 6%;
-      width: 100%;
-      text-align: center;
-      color: #ffffff;
-      z-index: 500;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      padding: 0 20px;
-      box-sizing: border-box;
-      animation: fadeIn 3s ease-in-out;
-    }
-
-    .mensaje-romantico h1 {
-      font-size: 2.2rem;
-      color: #ffe600;
-      text-shadow: 0 0 12px rgba(255, 230, 0, 0.7), 0 0 25px rgba(255, 200, 0, 0.4);
-      margin: 0 0 10px 0;
-      letter-spacing: 1px;
-    }
-
-    .mensaje-romantico p {
-      font-size: 1.2rem;
-      margin: 0;
-      color: #fff8d6;
-      text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
-      font-weight: 300;
-    }
-
-    /* Estilo para la posdata */
-    .mensaje-postdata {
-      position: fixed;
-      bottom: 25px;
-      right: 25px;
-      max-width: 320px;
-      text-align: right;
-      z-index: 9999;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      font-size: 1.2rem;
-      color: #ffe600;
-      text-shadow: 0 0 12px rgba(255, 230, 0, 0.8), 0 0 25px rgba(255, 200, 0, 0.5), 0 0 5px rgba(0,0,0,0.9);
-      animation: fadeIn 3s ease-in-out;
-      line-height: 1.4;
-      pointer-events: none;
-    }
-
-    /* Fondo con puntitos tenues tono amarillo-anaranjado */
-    .stars-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 10;
-      background-image: 
-        radial-gradient(1.5px 1.5px at 10% 15%, rgba(255, 170, 70, 0.4) 100%, transparent),
-        radial-gradient(2px 2px at 20% 35%, rgba(255, 150, 50, 0.35) 100%, transparent),
-        radial-gradient(1px 1px at 30% 70%, rgba(255, 190, 80, 0.3) 100%, transparent),
-        radial-gradient(2px 2px at 45% 20%, rgba(255, 160, 60, 0.4) 100%, transparent),
-        radial-gradient(1.5px 1.5px at 55% 80%, rgba(255, 180, 70, 0.3) 100%, transparent),
-        radial-gradient(2px 2px at 65% 40%, rgba(255, 140, 50, 0.35) 100%, transparent),
-        radial-gradient(1px 1px at 75% 15%, rgba(255, 190, 90, 0.4) 100%, transparent),
-        radial-gradient(2.5px 2.5px at 85% 60%, rgba(255, 160, 60, 0.3) 100%, transparent),
-        radial-gradient(1.5px 1.5px at 92% 30%, rgba(255, 170, 70, 0.4) 100%, transparent),
-        radial-gradient(1px 1px at 15% 85%, rgba(255, 180, 80, 0.35) 100%, transparent),
-        radial-gradient(2px 2px at 38% 50%, rgba(255, 150, 50, 0.3) 100%, transparent),
-        radial-gradient(1.5px 1.5px at 78% 85%, rgba(255, 170, 70, 0.35) 100%, transparent);
-      background-repeat: repeat;
-      background-size: 300px 300px;
-    }
-
-    /* Estilos para los corazones flotantes */
-    .hearts-container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      overflow: hidden;
-      top: 0;
-      left: 0;
-      pointer-events: none;
-      z-index: 250;
-    }
-
-    .heart {
-      position: absolute;
-      bottom: -20%;
-      color: #e63920;
-      animation: floatUp 8s linear infinite;
-      opacity: 0.85;
-      text-shadow: 0 0 15px rgba(230, 57, 32, 0.7);
-    }
-
-    .heart:nth-child(1) { left: 8%;  animation-delay: 0s; font-size: 80px; }
-    .heart:nth-child(2) { left: 22%; animation-delay: 2s; font-size: 120px; }
-    .heart:nth-child(3) { left: 38%; animation-delay: 4s; font-size: 90px; }
-    .heart:nth-child(4) { left: 52%; animation-delay: 1s; font-size: 140px; }
-    .heart:nth-child(5) { left: 68%; animation-delay: 5s; font-size: 100px; }
-    .heart:nth-child(6) { left: 84%; animation-delay: 3s; font-size: 110px; }
-
-    @keyframes floatUp {
-      0% {
-        transform: translateY(0) scale(0.8) rotate(0deg);
-        opacity: 0;
-      }
-      20% {
-        opacity: 0.85;
-      }
-      100% {
-        transform: translateY(-120vh) scale(1.1) rotate(360deg);
-        opacity: 0;
-      }
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-20px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-  </style>
-</head>
-<body class="container">
-
-  <!-- Pantalla de Entrada Interactiva -->
-  <div class="login-overlay" id="loginOverlay">
-    <div class="login-card">
-      <!-- Puedes cambiar el src por la imagen que desees -->
-      <img src="tu-imagen.jpg" alt="Imagen especial">
-      <h2>Mensaje Secreto 💌</h2>
-      <p>Escribe el código para abrir mi corazón</p>
-      <input type="password" id="codeInput" placeholder="Código secreto">
-      <span class="error-msg" id="errorMsg">Código incorrecto. Inténtalo de nuevo.</span>
-      <button onclick="verificarCodigo()">Abrir regalo</button>
+<div class="night"></div>
+<div class="flowers">
+  <div class="flower flower--1">
+    <div class="flower__leafs flower__leafs--1">
+      <div class="flower__leaf flower__leaf--1"></div>
+      <div class="flower__leaf flower__leaf--2"></div>
+      <div class="flower__leaf flower__leaf--3"></div>
+      <div class="flower__leaf flower__leaf--4"></div>
+      <div class="flower__white-circle"></div>
+      <div class="flower__light flower__light--1"></div>
+      <div class="flower__light flower__light--2"></div>
+      <div class="flower__light flower__light--3"></div>
+      <div class="flower__light flower__light--4"></div>
+      <div class="flower__light flower__light--5"></div>
+      <div class="flower__light flower__light--6"></div>
+      <div class="flower__light flower__light--7"></div>
+      <div class="flower__light flower__light--8"></div>
+    </div>
+    <div class="flower__line">
+      <div class="flower__line__leaf flower__line__leaf--1"></div>
+      <div class="flower__line__leaf flower__line__leaf--2"></div>
+      <div class="flower__line__leaf flower__line__leaf--3"></div>
+      <div class="flower__line__leaf flower__line__leaf--4"></div>
+      <div class="flower__line__leaf flower__line__leaf--5"></div>
+      <div class="flower__line__leaf flower__line__leaf--6"></div>
     </div>
   </div>
 
-  <!-- Contenido de las Flores Amarillas -->
-  <div class="mensaje-romantico">
-    <h1>¡Feliz día de las Flores Amarillas! 💛</h1>
-    <p>Para la persona más especial del mundo.</p>
-  </div>
-
-  <div class="mensaje-postdata">
-    Pd: Esto se suponia seria para este mesario que te olvidaste jsjs, o nos olvidamos en si, feliz mesario atrasado too :(
-  </div>
-
-  <div class="stars-background"></div>
-
-  <div class="hearts-container">
-    <div class="heart">♥</div>
-    <div class="heart">♥</div>
-    <div class="heart">♥</div>
-    <div class="heart">♥</div>
-    <div class="heart">♥</div>
-    <div class="heart">♥</div>
-  </div>
-
-  <div class="night"></div>
-  <div class="flowers">
-    <div class="flower flower--1">
-      <div class="flower__leafs flower__leafs--1">
-        <div class="flower__leaf flower__leaf--1"></div>
-        <div class="flower__leaf flower__leaf--2"></div>
-        <div class="flower__leaf flower__leaf--3"></div>
-        <div class="flower__leaf flower__leaf--4"></div>
-        <div class="flower__white-circle"></div>
-
-        <div class="flower__light flower__light--1"></div>
-        <div class="flower__light flower__light--2"></div>
-        <div class="flower__light flower__light--3"></div>
-        <div class="flower__light flower__light--4"></div>
-        <div class="flower__light flower__light--5"></div>
-        <div class="flower__light flower__light--6"></div>
-        <div class="flower__light flower__light--7"></div>
-        <div class="flower__light flower__light--8"></div>
-      </div>
-      <div class="flower__line">
-        <div class="flower__line__leaf flower__line__leaf--1"></div>
-        <div class="flower__line__leaf flower__line__leaf--2"></div>
-        <div class="flower__line__leaf flower__line__leaf--3"></div>
-        <div class="flower__line__leaf flower__line__leaf--4"></div>
-        <div class="flower__line__leaf flower__line__leaf--5"></div>
-        <div class="flower__line__leaf flower__line__leaf--6"></div>
-      </div>
+  <div class="flower flower--2">
+    <div class="flower__leafs flower__leafs--2">
+      <div class="flower__leaf flower__leaf--1"></div>
+      <div class="flower__leaf flower__leaf--2"></div>
+      <div class="flower__leaf flower__leaf--3"></div>
+      <div class="flower__leaf flower__leaf--4"></div>
+      <div class="flower__white-circle"></div>
+      <div class="flower__light flower__light--1"></div>
+      <div class="flower__light flower__light--2"></div>
+      <div class="flower__light flower__light--3"></div>
+      <div class="flower__light flower__light--4"></div>
+      <div class="flower__light flower__light--5"></div>
+      <div class="flower__light flower__light--6"></div>
+      <div class="flower__light flower__light--7"></div>
+      <div class="flower__light flower__light--8"></div>
     </div>
-
-    <div class="flower flower--2">
-      <div class="flower__leafs flower__leafs--2">
-        <div class="flower__leaf flower__leaf--1"></div>
-        <div class="flower__leaf flower__leaf--2"></div>
-        <div class="flower__leaf flower__leaf--3"></div>
-        <div class="flower__leaf flower__leaf--4"></div>
-        <div class="flower__white-circle"></div>
-
-        <div class="flower__light flower__light--1"></div>
-        <div class="flower__light flower__light--2"></div>
-        <div class="flower__light flower__light--3"></div>
-        <div class="flower__light flower__light--4"></div>
-        <div class="flower__light flower__light--5"></div>
-        <div class="flower__light flower__light--6"></div>
-        <div class="flower__light flower__light--7"></div>
-        <div class="flower__light flower__light--8"></div>
-      </div>
-      <div class="flower__line">
-        <div class="flower__line__leaf flower__line__leaf--1"></div>
-        <div class="flower__line__leaf flower__line__leaf--2"></div>
-        <div class="flower__line__leaf flower__line__leaf--3"></div>
-        <div class="flower__line__leaf flower__line__leaf--4"></div>
-      </div>
-    </div>
-
-    <div class="flower flower--3">
-      <div class="flower__leafs flower__leafs--3">
-        <div class="flower__leaf flower__leaf--1"></div>
-        <div class="flower__leaf flower__leaf--2"></div>
-        <div class="flower__leaf flower__leaf--3"></div>
-        <div class="flower__leaf flower__leaf--4"></div>
-        <div class="flower__white-circle"></div>
-
-        <div class="flower__light flower__light--1"></div>
-        <div class="flower__light flower__light--2"></div>
-        <div class="flower__light flower__light--3"></div>
-        <div class="flower__light flower__light--4"></div>
-        <div class="flower__light flower__light--5"></div>
-        <div class="flower__light flower__light--6"></div>
-        <div class="flower__light flower__light--7"></div>
-        <div class="flower__light flower__light--8"></div>
-      </div>
-      <div class="flower__line">
-        <div class="flower__line__leaf flower__line__leaf--1"></div>
-        <div class="flower__line__leaf flower__line__leaf--2"></div>
-        <div class="flower__line__leaf flower__line__leaf--3"></div>
-        <div class="flower__line__leaf flower__line__leaf--4"></div>
-      </div>
-    </div>
-
-    <div class="flower flower--4">
-      <div class="flower__leafs flower__leafs--3">
-        <div class="flower__leaf flower__leaf--1"></div>
-        <div class="flower__leaf flower__leaf--2"></div>
-        <div class="flower__leaf flower__leaf--3"></div>
-        <div class="flower__leaf flower__leaf--4"></div>
-        <div class="flower__white-circle"></div>
-
-        <div class="flower__light flower__light--1"></div>
-        <div class="flower__light flower__light--2"></div>
-        <div class="flower__light flower__light--3"></div>
-        <div class="flower__light flower__light--4"></div>
-        <div class="flower__light flower__light--5"></div>
-        <div class="flower__light flower__light--6"></div>
-        <div class="flower__light flower__light--7"></div>
-        <div class="flower__light flower__light--8"></div>
-      </div>
-      <div class="flower__line">
-        <div class="flower__line__leaf flower__line__leaf--1"></div>
-        <div class="flower__line__leaf flower__line__leaf--2"></div>
-        <div class="flower__line__leaf flower__line__leaf--3"></div>
-        <div class="flower__line__leaf flower__line__leaf--4"></div>
-      </div>
-    </div>
-
-    <div class="grow-ans" style="--d:1.2s">
-      <div class="flower__g-long">
-        <div class="flower__g-long__top"></div>
-        <div class="flower__g-long__bottom"></div>
-      </div>
-    </div>
-
-    <div class="growing-grass">
-      <div class="flower__grass flower__grass--1">
-        <div class="flower__grass--top"></div>
-        <div class="flower__grass--bottom"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--1"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--2"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--3"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--4"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--5"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--6"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--7"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--8"></div>
-        <div class="flower__grass__overlay"></div>
-      </div>
-    </div>
-
-    <div class="growing-grass">
-      <div class="flower__grass flower__grass--2">
-        <div class="flower__grass--top"></div>
-        <div class="flower__grass--bottom"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--1"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--2"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--3"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--4"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--5"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--6"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--7"></div>
-        <div class="flower__grass__leaf flower__grass__leaf--8"></div>
-        <div class="flower__grass__overlay"></div>
-      </div>
-    </div>
-
-    <div class="grow-ans" style="--d:2.4s">
-      <div class="flower__g-right flower__g-right--1">
-        <div class="leaf"></div>
-      </div>
-    </div>
-
-    <div class="grow-ans" style="--d:2.8s">
-      <div class="flower__g-right flower__g-right--2">
-        <div class="leaf"></div>
-      </div>
-    </div>
-
-    <div class="grow-ans" style="--d:2.8s">
-      <div class="flower__g-front">
-        <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--1"><div class="flower__g-front__leaf"></div></div>
-        <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--2"><div class="flower__g-front__leaf"></div></div>
-        <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--3"><div class="flower__g-front__leaf"></div></div>
-        <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--4"><div class="flower__g-front__leaf"></div></div>
-        <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--5"><div class="flower__g-front__leaf"></div></div>
-        <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--6"><div class="flower__g-front__leaf"></div></div>
-        <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--7"><div class="flower__g-front__leaf"></div></div>
-        <div class="flower__g-front__leaf-wrapper flower__g-front__leaf-wrapper--8"><div class="flower__g-front__leaf"></div></div>
-        <div class="flower__g-front__line"></div>
-      </div>
-    </div>
-
-    <div class="grow-ans" style="--d:3.2s">
-      <div class="flower__g-fr">
-        <div class="leaf"></div>
-        <div class="flower__g-fr__leaf flower__g-fr__leaf--1"></div>
-        <div class="flower__g-fr__leaf flower__g-fr__leaf--2"></div>
-        <div class="flower__g-fr__leaf flower__g-fr__leaf--3"></div>
-        <div class="flower__g-fr__leaf flower__g-fr__leaf--4"></div>
-        <div class="flower__g-fr__leaf flower__g-fr__leaf--5"></div>
-        <div class="flower__g-fr__leaf flower__g-fr__leaf--6"></div>
-        <div class="flower__g-fr__leaf flower__g-fr__leaf--7"></div>
-        <div class="flower__g-fr__leaf flower__g-fr__leaf--8"></div>
-      </div>
-    </div>
-
-    <div class="long-g long-g--0">
-      <div class="grow-ans" style="--d:3s"><div class="leaf leaf--0"></div></div>
-      <div class="grow-ans" style="--d:2.2s"><div class="leaf leaf--1"></div></div>
-      <div class="grow-ans" style="--d:3.4s"><div class="leaf leaf--2"></div></div>
-      <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
-    </div>
-
-    <div class="long-g long-g--1">
-      <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--0"></div></div>
-      <div class="grow-ans" style="--d:3.8s"><div class="leaf leaf--1"></div></div>
-      <div class="grow-ans" style="--d:4s"><div class="leaf leaf--2"></div></div>
-      <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--3"></div></div>
-    </div>
-
-    <div class="long-g long-g--2">
-      <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
-      <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
-      <div class="grow-ans" style="--d:4.4s"><div class="leaf leaf--2"></div></div>
-      <div class="grow-ans" style="--d:4.6s"><div class="leaf leaf--3"></div></div>
-    </div>
-
-    <div class="long-g long-g--3">
-      <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
-      <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
-      <div class="grow-ans" style="--d:3s"><div class="leaf leaf--2"></div></div>
-      <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
-    </div>
-
-    <div class="long-g long-g--4">
-      <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
-      <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
-      <div class="grow-ans" style="--d:3s"><div class="leaf leaf--2"></div></div>
-      <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
-    </div>
-
-    <div class="long-g long-g--5">
-      <div class="grow-ans" style="--d:4s"><div class="leaf leaf--0"></div></div>
-      <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--1"></div></div>
-      <div class="grow-ans" style="--d:3s"><div class="leaf leaf--2"></div></div>
-      <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
-    </div>
-
-    <div class="long-g long-g--6">
-      <div class="grow-ans" style="--d:4.2s"><div class="leaf leaf--0"></div></div>
-      <div class="grow-ans" style="--d:4.4s"><div class="leaf leaf--1"></div></div>
-      <div class="grow-ans" style="--d:4.6s"><div class="leaf leaf--2"></div></div>
-      <div class="grow-ans" style="--d:4.8s"><div class="leaf leaf--3"></div></div>
-    </div>
-
-    <div class="long-g long-g--7">
-      <div class="grow-ans" style="--d:3s"><div class="leaf leaf--0"></div></div>
-      <div class="grow-ans" style="--d:3.2s"><div class="leaf leaf--1"></div></div>
-      <div class="grow-ans" style="--d:3.5s"><div class="leaf leaf--2"></div></div>
-      <div class="grow-ans" style="--d:3.6s"><div class="leaf leaf--3"></div></div>
+    <div class="flower__line">
+      <div class="flower__line__leaf flower__line__leaf--1"></div>
+      <div class="flower__line__leaf flower__line__leaf--2"></div>
+      <div class="flower__line__leaf flower__line__leaf--3"></div>
+      <div class="flower__line__leaf flower__line__leaf--4"></div>
     </div>
   </div>
 
-  <script>
-    const CODIGO_CORRECTO = "1234"; // Cambia este valor por la clave que prefieras
-
-    function verificarCodigo() {
-      const input = document.getElementById("codeInput").value;
-      const errorMsg = document.getElementById("errorMsg");
-      const overlay = document.getElementById("loginOverlay");
-
-      if (input === CODIGO_CORRECTO) {
-        errorMsg.style.display = "none";
-        overlay.classList.add("hidden");
-      } else {
-        errorMsg.style.display = "block";
-      }
-    }
-
-    // Permitir presionar "Enter" en el campo de texto
-    document.getElementById("codeInput").addEventListener("keypress", function(event) {
-      if (event.key === "Enter") {
-        verificarCodigo();
-      }
-    });
-  </script>
-  <script src="./script.js"></script>
-</body>
-</html>
+  <div class="flower flower--3">
+    <div class="flower__leafs flower__leafs--3">
+      <div class="flower__leaf flower__leaf--1"></div>
+      <div class="flower__leaf flower__leaf--2"></div>
+      <div class="flower__leaf flower__leaf--3"></div>
+      <div class="flower__leaf flower__leaf--4"></div>
+      <div class="flower__white-circle"></div>
+      <div class="flower__light flower__light--1"></div>
+      <div class="flower__light flower__light--2"></div>
+      <div class="flower__light flower__light--3"></div>
+      <div class="flower__light flower__light--4"></div>
+      <div class="flower__light flower__light--5"></div>
+      <div class="flower__light flower__light--6"></div>
+      <div class="flower__light flower__light--7"></div>
+      <div class="flower__light flower__light--8"></div>
+    </div>
+    <div class="flower__line">
+      <div class="flower__line__leaf flower__line__leaf--1"></div>
+      <div class="flower__line__leaf flower__line__leaf--2"></div>
+      <div class="flower__line__leaf flower__line__leaf--3"></div>
+      <div class="flower__line__leaf flower__line__leaf--4"></div>
+    </div>
+  </div>
+</div>
