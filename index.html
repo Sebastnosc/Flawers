@@ -5,8 +5,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Flores Amarillas para Ti</title>
   <link rel="stylesheet" href="./style.css">
+  <style>
+    /* Estilos para el mensaje romántico */
+    .mensaje-romantico {
+      position: absolute;
+      top: 8%;
+      width: 100%;
+      text-align: center;
+      color: #ffffff;
+      z-index: 300;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 0 20px;
+      box-sizing: border-box;
+      animation: fadeIn 3s ease-in-out;
+    }
+
+    .mensaje-romantico h1 {
+      font-size: 2.2rem;
+      color: #ffe600;
+      text-shadow: 0 0 12px rgba(255, 230, 0, 0.7), 0 0 25px rgba(255, 200, 0, 0.4);
+      margin: 0 0 10px 0;
+      letter-spacing: 1px;
+    }
+
+    .mensaje-romantico p {
+      font-size: 1.2rem;
+      margin: 0;
+      color: #fff8d6;
+      text-shadow: 0 0 8px rgba(0, 0, 0, 0.8);
+      font-weight: 300;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
 </head>
 <body class="container">
+
+  <!-- Mensaje Romántico -->
+  <div class="mensaje-romantico">
+    <h1>¡Feliz día de las Flores Amarillas! 💛</h1>
+    <p>Para la persona más especial.</p>
+  </div>
+
   <div class="night"></div>
   <div class="flowers">
     <div class="flower flower--1">
